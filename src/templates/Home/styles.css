@@ -1,17 +1,14 @@
-
 .container{
   min-height: 100vh;
   background: #eee;
   padding: 20px;
 }
 
-
 .posts{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 30px;
 }
-
 
 .post{
   background: white;
