@@ -3,6 +3,7 @@ import './styles.css';
 import { Posts } from '../../components/Posts';
 import { loadPosts } from '../../utils/load-posts'
 import { Button } from '../../components/Button';
+import { TextInput } from '../../components/TextInput';
 
 
 class Home extends Component {
@@ -10,7 +11,8 @@ class Home extends Component {
     posts: [],
     allPosts: [],
     page: 0,
-    postsPerPage: 2,
+    postsPerPage: 12,
+    searchValue: '',
   };
   // life cycle method
   async componentDidMount() {
@@ -43,15 +45,38 @@ class Home extends Component {
     this.setState({ posts, page: nextPage });
   }
 
+  handleChange = (e) => {
+    const { value } = e.target;
+    this.setState({ searchValue: value });
+  }
+
   render() {
-    const { posts } = this.state;
+    const { posts, searchValue, allPosts } = this.state;
+
+    const filteredPosts = !!searchValue ?
+      allPosts.filter(post => {
+        return post.title.toLowerCase().includes(searchValue.toLowerCase())
+      })
+      :
+      posts;
     return (
       <>
         <div className="title-page">
-          <h1>Todos os posts</h1>
+          <h1>All Posts</h1>
         </div>
         <section className="container">
-          <Posts posts={posts} />
+          <div className="search-container">
+            <TextInput
+              searchValue={searchValue}
+              handleChange={this.handleChange}
+            />
+          </div>
+          {filteredPosts.length === 0 && (
+            <h1>
+              Dont exist post with this word
+            </h1>
+          )}
+          <Posts posts={filteredPosts} />
           <div className="button-container">
             <Button
               text="Load More Posts "
